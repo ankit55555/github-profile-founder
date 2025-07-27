@@ -531,9 +531,28 @@ export default function GithubProfileFinder() {
       <div className="error-message">
         <p>{error}</p>
         {rateLimitInfo.isLimited && rateLimitInfo.resetTime && (
-          <p className="rate-limit-info">
-            Rate limit resets at: {rateLimitInfo.resetTime.toLocaleTimeString()}
-          </p>
+          <div className="rate-limit-info">
+            <p>Rate limit resets at: {rateLimitInfo.resetTime.toLocaleTimeString()}</p>
+            <div className="rate-limit-solutions">
+              <h4>💡 Solutions to avoid rate limits:</h4>
+              <ul>
+                <li>🔑 Add a GitHub token to get 5000 requests/hour instead of 60</li>
+                <li>⏰ Wait until {rateLimitInfo.resetTime.toLocaleTimeString()} for the limit to reset</li>
+                <li>💾 Use cached results from search history</li>
+                <li>🧹 Clear cache to free up memory and rely on cached data</li>
+              </ul>
+              <div className="token-instructions">
+                <p><strong>How to add a GitHub token:</strong></p>
+                <ol>
+                  <li>Go to <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">GitHub Settings → Tokens</a></li>
+                  <li>Generate a new token (no special permissions needed)</li>
+                  <li>Create a <code>.env</code> file in your project root</li>
+                  <li>Add: <code>VITE_GITHUB_TOKEN=your_token_here</code></li>
+                  <li>Restart the development server</li>
+                </ol>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     );
@@ -593,17 +612,43 @@ export default function GithubProfileFinder() {
             aria-label="GitHub username search"
             aria-expanded={showSuggestions}
             aria-haspopup="listbox"
+            disabled={rateLimitInfo.isLimited}
           />
           {suggestionsList}
         </div>
         <button 
           onClick={handleSubmit} 
-          disabled={!userName.trim() || loading}
+          disabled={!userName.trim() || loading || rateLimitInfo.isLimited}
           className="search-button"
+          title={rateLimitInfo.isLimited ? 'Rate limit exceeded. Please wait or add a GitHub token.' : ''}
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? 'Searching...' : rateLimitInfo.isLimited ? 'Rate Limited' : 'Search'}
         </button>
       </div>
+      
+      {/* Rate limit warning for low remaining calls */}
+      {rateLimitInfo.remaining !== null && rateLimitInfo.remaining <= 10 && rateLimitInfo.remaining > 0 && (
+        <div className="rate-limit-warning">
+          <div className="warning-content">
+            <span className="warning-icon">⚠️</span>
+            <div className="warning-text">
+              <p><strong>Low API calls remaining: {rateLimitInfo.remaining}</strong></p>
+              <p>Consider adding a GitHub token to get 5000 requests/hour instead of 60.</p>
+              {rateLimitInfo.resetTime && (
+                <p>Rate limit resets at: {rateLimitInfo.resetTime.toLocaleTimeString()}</p>
+              )}
+            </div>
+            <a 
+              href="https://github.com/settings/tokens" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="get-token-link"
+            >
+              Get Token
+            </a>
+          </div>
+        </div>
+      )}
       
       {searchHistoryComponent}
       {errorMessage}
@@ -617,8 +662,11 @@ export default function GithubProfileFinder() {
       ) : null}
       
       {rateLimitInfo.remaining !== null && (
-        <div className="rate-limit-display">
+        <div className={`rate-limit-display ${rateLimitInfo.remaining <= 10 ? 'warning' : ''} ${rateLimitInfo.isLimited ? 'limited' : ''}`}>
           API calls remaining: {rateLimitInfo.remaining}
+          {import.meta.env.VITE_GITHUB_TOKEN && import.meta.env.VITE_GITHUB_TOKEN !== 'your_github_personal_access_token_here' && (
+            <span className="token-active"> (🔑 Token Active)</span>
+          )}
         </div>
       )}
     </div>

@@ -1167,13 +1167,247 @@
   color: #FFC107;
   font-size: 14px;
   backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
+.rate-limit-display.warning {
+  background: rgba(255, 152, 0, 0.15);
+  border-color: rgba(255, 152, 0, 0.4);
+  color: #FF9800;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.rate-limit-display.limited {
+  background: rgba(244, 67, 54, 0.15);
+  border-color: rgba(244, 67, 54, 0.4);
+  color: #F44336;
+  animation: shake 0.5s ease-in-out;
+}
+
+.token-active {
+  color: #4CAF50;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Rate Limit Warning */
+.rate-limit-warning {
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.warning-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.warning-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
+}
+
+.warning-text {
+  flex: 1;
+}
+
+.warning-text p {
+  margin: 0 0 8px 0;
+  color: #FF9800;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.warning-text p:last-child {
+  margin-bottom: 0;
+}
+
+.get-token-link {
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.get-token-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.4);
+  text-decoration: none;
+}
+
+/* Enhanced Error Message */
 .rate-limit-info {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #FF6347;
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.2);
+  border-radius: 8px;
+}
+
+.rate-limit-info p {
+  margin: 0 0 12px 0;
+  color: #FF6B9D;
   font-style: italic;
+  font-size: 13px;
+}
+
+.rate-limit-solutions {
+  margin-top: 16px;
+}
+
+.rate-limit-solutions h4 {
+  margin: 0 0 12px 0;
+  color: #79C0FF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.rate-limit-solutions ul {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+  color: #C9D1D9;
+}
+
+.rate-limit-solutions li {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.token-instructions {
+  background: rgba(121, 192, 255, 0.1);
+  border: 1px solid rgba(121, 192, 255, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.token-instructions p {
+  margin: 0 0 12px 0;
+  color: #79C0FF;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.token-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #C9D1D9;
+}
+
+.token-instructions li {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.token-instructions a {
+  color: #58A6FF;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.token-instructions a:hover {
+  color: #79C0FF;
+  text-decoration: underline;
+}
+
+.token-instructions code {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: #FFC107;
+}
+
+/* Disabled state for inputs when rate limited */
+.search-container input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(244, 67, 54, 0.1);
+  border-color: rgba(244, 67, 54, 0.3);
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(244, 67, 54, 0.2) !important;
+  border-color: rgba(244, 67, 54, 0.3) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive adjustments for rate limit components */
+@media (max-width: 768px) {
+  .warning-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .warning-icon {
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .get-token-link {
+    align-self: flex-start;
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .token-instructions {
+    padding: 12px;
+  }
+  
+  .token-instructions ol {
+    padding-left: 16px;
+  }
+  
+  .rate-limit-solutions ul {
+    padding-left: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rate-limit-warning {
+    padding: 12px;
+    margin: 16px 0;
+  }
+  
+  .warning-text p {
+    font-size: 13px;
+  }
+  
+  .rate-limit-solutions h4 {
+    font-size: 15px;
+  }
+  
+  .rate-limit-solutions li,
+  .token-instructions li {
+    font-size: 12px;
+  }
 }
 
 /* Enhanced Suggestions Dropdown */
